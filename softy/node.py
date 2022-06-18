@@ -1,5 +1,5 @@
 import numpy as np
-from .edge import Edge
+from .link import Link
 
 
 class Node:
@@ -8,11 +8,14 @@ class Node:
         self.mass = mass
         self.velocity = np.zeros(2, dtype="float32")
         self._force_sum = np.zeros(2, dtype="float32")
+        
+        self._prev: Link = None
+        self._next: Link = None
 
-        self._edges: list[Edge] = []
-
-    def connect(self, node):
-        self._edges.append(Edge(self, node))
+    def connect_forward(self, node):
+        link = Link(self, node)
+        self._next = link
+        node._prev = link
 
     def tick(self, dt):
         acc = self._force_sum / self.mass

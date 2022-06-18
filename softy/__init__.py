@@ -1,1 +1,2 @@
-from .node import *
+from .node import Node
+from .link import Link
