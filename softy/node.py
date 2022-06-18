@@ -11,7 +11,7 @@ class Node:
 
         self._edges: list[Edge] = []
 
-    def connect(self, node: Node):
+    def connect(self, node):
         self._edges.append(Edge(self, node))
 
     def tick(self, dt):
@@ -24,4 +24,4 @@ class Node:
         self._force_sum += force
 
     def reset(self):
-        self._force_sum.zero()
+        self._force_sum[:] = 0
