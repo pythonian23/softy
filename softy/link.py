@@ -1,7 +1,4 @@
-from .node import Node
-
-
 class Link:
-    def __init__(self, first: Node, second: Node):
+    def __init__(self, first, second):
         self.first = first
         self.second = second
