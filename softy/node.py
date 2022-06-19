@@ -3,19 +3,18 @@ from .link import Link
 
 
 class Node:
-    def __init__(self, mass, loc=(0, 0), unique_id=None):
-        """
-        If unique_id is provided, it is best to provide it for every node in an object to ensure safety.
-        """
+    def __init__(self, name, mass, loc=(0, 0)):
+        self.name = name
+
         self.loc = np.array(loc, dtype="float32")
         self.mass = mass
         self.velocity = np.zeros(2, dtype="float32")
         self._force_sum = np.zeros(2, dtype="float32")
 
-        self._prev: Link = None
-        self._next: Link = None
+        self._prev: Link = ...
+        self._next: Link = ...
 
-    def connect_forward(self, node):
+    def connect_forward(self, node, spring):
         """
         Connect another node as the next node. This connects both ways.
         """

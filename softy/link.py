@@ -1,4 +1,5 @@
 class Link:
-    def __init__(self, first, second):
-        self.first = first
-        self.second = second
+    def __init__(self, start, end, spring=0):
+        self.start = start
+        self.end = end
+        self.spring = spring
