@@ -11,16 +11,14 @@ class Node:
         self.velocity = np.zeros(2, dtype="float32")
         self._force_sum = np.zeros(2, dtype="float32")
 
-        self._prev: Link = ...
-        self._next: Link = ...
+        self.link: Link = ...
 
-    def connect_forward(self, node, spring):
+    def connect(self, node, spring):
         """
         Connect another node as the next node. This connects both ways.
         """
-        link = Link(self, node)
-        self._next = link
-        node._prev = link
+        link = Link(self, node, spring=spring)
+        self.link = link
 
     def tick(self, dt):
         acc = self._force_sum / self.mass

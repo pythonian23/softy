@@ -1,5 +1,4 @@
 from .node import Node
-from .link import Link
 
 from typing import Any
 
@@ -11,6 +10,9 @@ class Object:
         self.name = None
         self.nodes: dict[Any, Node] = {}
         self._init = False
+
+    def init(self):
+        self._init = True
 
     def deinit(self):
         self.__init__()
@@ -24,10 +26,23 @@ class Object:
         self.name = data["Name"]
         for name, node in data["Nodes"].items():
             self.nodes[name] = Node(name, node["mass"], loc=(node["x"], node["y"]))
-        for edge in data["Edges"]:
-            self.nodes[edge["start"]].connect_forward(
-                self.nodes[edge["end"]], edge["spring"]
+        for name, node in data["Nodes"].items():
+            self.nodes[name].connect(
+                self.nodes[node["link"]["next"]], node["link"]["spring"]
             )
+        self.init()
 
     def dump(self, file):
-        ...
+        data = {
+            "Name": self.name,
+            "Nodes": {
+                name: {
+                    "x": float(node.loc[0]),
+                    "y": float(node.loc[1]),
+                    "mass": node.mass,
+                    "link": {"next": node.link.end.name, "spring": node.link.spring},
+                }
+                for name, node in self.nodes.items()
+            },
+        }
+        yaml.dump(data, file)
