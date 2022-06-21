@@ -11,9 +11,11 @@ class Object:
         self.name = None
         self.pressure = 0
         self.nodes: dict[Any, Node] = {}
+        self._neutral_area = 0
         self._init = False
 
     def init(self):
+        self._neutral_area = self._area()
         self._init = True
 
     def deinit(self):
@@ -51,12 +53,17 @@ class Object:
         }
         yaml.safe_dump(data, file)
 
-    def area(self) -> float:
+    def _area(self) -> float:
         boundary = np.array([node.loc for node in self.nodes.values()], dtype="float32")
-        return (
-            np.abs(
+        return np.abs(
+            np.divide(
                 np.sum(boundary[:, 0] * np.roll(boundary[:, 1], -1))
-                - np.sum(boundary[:, 0] * np.roll(boundary[:, 1], 1))
+                - np.sum(boundary[:, 0] * np.roll(boundary[:, 1], 1)),
+                2,
             )
-            / 2
+        )
+
+    def _center(self) -> np.ndarray:
+        return np.divide(
+            np.sum([node.loc for node in self.nodes.values()], axis=0), len(self.nodes)
         )
