@@ -2,12 +2,14 @@ from .node import Node
 
 from typing import Any
 
+import numpy as np
 import yaml
 
 
 class Object:
     def __init__(self):
         self.name = None
+        self.pressure = 0
         self.nodes: dict[Any, Node] = {}
         self._init = False
 
@@ -24,6 +26,7 @@ class Object:
             )
         data = yaml.safe_load(file)
         self.name = data["Name"]
+        self.pressure = data["Pressure"]
         for name, node in data["Nodes"].items():
             self.nodes[name] = Node(name, node["mass"], loc=(node["x"], node["y"]))
         for name, node in data["Nodes"].items():
@@ -35,6 +38,7 @@ class Object:
     def dump(self, file):
         data = {
             "Name": self.name,
+            "Pressure": self.pressure,
             "Nodes": {
                 name: {
                     "x": float(node.loc[0]),
@@ -45,4 +49,14 @@ class Object:
                 for name, node in self.nodes.items()
             },
         }
-        yaml.dump(data, file)
+        yaml.safe_dump(data, file)
+
+    def area(self) -> float:
+        boundary = np.array([node.loc for node in self.nodes.values()], dtype="float32")
+        return (
+            np.abs(
+                np.sum(boundary[:, 0] * np.roll(boundary[:, 1], -1))
+                - np.sum(boundary[:, 0] * np.roll(boundary[:, 1], 1))
+            )
+            / 2
+        )
