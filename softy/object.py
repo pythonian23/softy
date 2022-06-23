@@ -53,6 +53,14 @@ class Object:
         }
         yaml.safe_dump(data, file)
 
+    def apply_force(self, force: np.ndarray):
+        for node in self.nodes:
+            node.apply_force(force)
+
+    def tick(self, dt):
+        for node in self.nodes:
+            node.tick(dt)
+
     def _area(self) -> float:
         boundary = np.array([node.loc for node in self.nodes.values()], dtype="float32")
         return np.abs(
