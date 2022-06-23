@@ -45,7 +45,7 @@ class Object:
                 name: {
                     "x": float(node.loc[0]),
                     "y": float(node.loc[1]),
-                    "mass": node.mass,
+                    "mass": node.get_mass(),
                     "link": {"next": node.link.end.name, "spring": node.link.spring},
                 }
                 for name, node in self.nodes.items()
