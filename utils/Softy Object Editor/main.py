@@ -1,13 +1,17 @@
-from tkinter import *
-from tkinter.ttk import *
+import sys
+
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-window = Tk()
-window.wm_title("Softy Object Editor")
+def window():
+    app = QtWidgets.QApplication(sys.argv)
+    widget = QtWidgets.QWidget()
+    widget.setWindowTitle("MISO: Make Interesting Softy Objects")
+    label = QtWidgets.QLabel(widget)
+    label.setText("MISO: Make Interesting Softy Objects")
+    widget.show()
+    sys.exit(app.exec_())
 
-preview = Canvas(name="preview", width=640, height=640, background="#000")
-preview.pack()
 
-mass = Entry()
-
-window.mainloop()
+if __name__ == "__main__":
+    window()
